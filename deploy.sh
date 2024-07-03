@@ -5,18 +5,14 @@ set -e
 # Navigate to the application directory
 cd /home/site/wwwroot
 
-# Logging to help debug
-echo "Running database migrations..."
-
 # Run database migrations
+echo "Running database migrations..."
 flask db upgrade
 
-echo "Initializing admin user..."
-
 # Initialize admin user
+echo "Initializing admin user..."
 python -c "from app import init_admin_user; init_admin_user()"
 
-echo "Starting the application..."
-
 # Start the application
-flask run --host=0.0.0.0 --port=8000
+echo "Starting the application..."
+gunicorn -w 4 -b 0.0.0.0:8000 app:app
