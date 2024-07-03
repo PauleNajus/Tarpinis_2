@@ -3,15 +3,15 @@
 # Navigate to the application directory
 cd /home/site/wwwroot
 
-# Set up virtual environment if it doesn't exist
+# Check if the virtual environment exists, create it if it doesn't
 if [ ! -d "antenv" ]; then
   python -m venv antenv
 fi
 
-# Activate virtual environment
+# Activate the virtual environment
 source antenv/bin/activate
 
-# Install dependencies
+# Upgrade pip and install dependencies
 pip install --upgrade pip
 pip install -r requirements.txt
 
