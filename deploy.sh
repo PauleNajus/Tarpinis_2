@@ -3,6 +3,18 @@
 # Navigate to the application directory
 cd /home/site/wwwroot
 
+# Set up virtual environment if it doesn't exist
+if [ ! -d "antenv" ]; then
+  python -m venv antenv
+fi
+
+# Activate virtual environment
+source antenv/bin/activate
+
+# Install dependencies
+pip install --upgrade pip
+pip install -r requirements.txt
+
 # Run database migrations
 flask db upgrade
 
