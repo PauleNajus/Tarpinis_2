@@ -1,11 +1,11 @@
-from flask import Flask, render_template, request
-from config import Config
+import logging
+import os
+from flask import Flask, request, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
+from app.config import Config
 from dotenv import load_dotenv
-import os
-from app.helpers import get_products_and_categories
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -14,11 +14,17 @@ login = LoginManager()
 def create_app():
     app = Flask(__name__)
     load_dotenv()
-    app.config.from_object(Config)
+    app.config.from_object('app.config.Config')
 
     db.init_app(app)
     migrate.init_app(app, db)
     login.init_app(app)
+
+    if not app.debug:
+        logging.basicConfig(level=logging.INFO)
+        stream_handler = logging.StreamHandler()
+        stream_handler.setLevel(logging.INFO)
+        app.logger.addHandler(stream_handler)
 
     from app.routes.user import user_bp
     from app.routes.auth import auth_bp
@@ -31,6 +37,8 @@ def create_app():
     @app.route('/')
     def index():
         selected_category = request.args.get('category', '')
+        # Import here to avoid circular imports
+        from app.helpers import get_products_and_categories
         products, categories = get_products_and_categories(selected_category)
         return render_template('shared/index.html', products=products, categories=categories, selected_category=selected_category)
 
