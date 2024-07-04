@@ -15,7 +15,7 @@ ENV FLASK_APP=app.py
 ENV FLASK_ENV=production
 
 # Run database migrations
-RUN flask db upgrade
+RUN ["flask", "db", "upgrade"]
 
 # Make port 8000 available to the world outside this container
 EXPOSE 8000
