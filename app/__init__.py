@@ -74,3 +74,5 @@ def init_admin_user():
                 db.session.commit()
         else:
             raise ValueError("Environment variables ADMIN_USERNAME, ADMIN_EMAIL, ADMIN_PASSWORD are not set.")
+
+app = create_app()
